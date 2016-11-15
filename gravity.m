@@ -1,11 +1,9 @@
 % function to give force of gravity on obj2 by obj1, returns force vector
-function [f_x, f_y, f_z] = gravity(obj1, obj2)
+function [f_x, f_y, f_z] = gravity(obj1, obj2, m1, m2)
     G = 6.67e-11;
-    m1 = obj1.m;
-    m2 = obj2.m;
-    d_x = obj1.x(1) - obj2.x(1);
-    d_y = obj1.x(2) - obj2.x(2);
-    d_z = obj1.x(3) - obj2.x(3);
+    d_x = obj1(1) - obj2(1);
+    d_y = obj1(2) - obj2(2);
+    d_z = obj1(3) - obj2(3);
     d = [d_x, d_y, d_z];
     r = sqrt(sum(d.^2));
     f = G * m1 * m2 / (r^2);
