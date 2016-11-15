@@ -1,0 +1,17 @@
+% Flow function for ode45, returns velocity and accleration vectors in 
+% m/s^2 and m/s given [rocket, earth, mars, v_rocket, v_earth, v_mars] in 
+% meters and m/s
+function [v_rocket, v_earth, v_mars, a_rocket, a_earth, a_mars] ...
+    = getAcceleration(t, S)
+    rocket = S(1);
+    earth = S(2);
+    mars = S(3);
+    v_rocket = S(4);
+    v_earth = S(5);
+    v_mars = S(6);
+    a_rocket = (gravity(earth, rocket) + gravity(mars, rocket, m_mars, ...
+        m_rocket) + gravity(sun, rocket))/m_rocket; % + drag eventually
+    a_earth = gravity(sun, earth, m_sun, m_earth)/m_earth;
+    f_mars = gravity(sun, mars, m_sun, m_mars);
+    a_mars = f_mars/m_mars;
+end
