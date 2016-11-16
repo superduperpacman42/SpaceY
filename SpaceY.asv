@@ -1,9 +1,0 @@
-function SpaceY()
-    x = [];
-    v = [];
-    m = [];
-    [T, S] = simulate(x, v, m, 0, 0, 0, 0);
-     = S(:,1);
-    Y = S(:,2);
-    comet(S(:,1), Y);
-end
