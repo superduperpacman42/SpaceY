@@ -8,5 +8,6 @@ function [T, S] = simulate(x, v, m, v_fuel, m_fuel, dtheta, dphi)
     dphi = deg2rad(dphi);
     direction = [v(1), v(2), v(3)]; % incorporate dtheta and dphi
     v(1) = v(1) + thrust(v_fuel, m_fuel, direction)/m(1);
-    [T, S] = ode45(@getAcceleration, [0,100000000], [x, v, m]);
+    options = odeset('MaxStep', 1e5);
+    [T, S] = ode45(@getAcceleration, [0,10*pi*1e7], [x, v, m], options);
 end
