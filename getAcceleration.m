@@ -17,7 +17,7 @@ function dS = getAcceleration(~, S)
               + gravity(mars, rocket, m_mars, m_rocket)...
               + gravity(sun, rocket, m_sun, m_rocket)...
               + drag(rocket, v_rocket, earth, mars))/m_rocket;
-    a_earth = gravity(sun, earth, m_sun, m_earth)/m_earth;
-    a_mars = gravity(sun, mars, m_sun, m_mars)/m_mars;
+    a_earth = (gravity(sun, earth, m_sun, m_earth) + gravity(rocket, earth, m_rocket, m_earth))/m_earth;
+    a_mars = (gravity(sun, mars, m_sun, m_mars) + gravity(rocket, mars, m_rocket, m_mars))/m_mars;
     dS = [v_rocket'; v_earth'; v_mars'; a_rocket'; a_earth'; a_mars'; 0; 0; 0; 0];
 end
