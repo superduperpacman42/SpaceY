@@ -1,12 +1,34 @@
 function SpaceY()
-    x = [[152.1e9+35786e3, 0, 0], [152.1e9, 0, 0], [249.23e9, 0, 0]];
-    v = [[0, 29.29e3+3337, 0], [0, 29.29e3, 0], [0, 21.97e3, 0]];
-    m = [1e3, 5.972e24, 6.39e23, 1.989e30];
-    [T, S] = simulate(x, v, m, 1, 1);
+    closestClosestApproach = 1e100;
+    bestT = 0;
+    bestS = 0;
+    bestTheta = 0;
+    for theta = deg2rad(27:.01:27.2)
+        rad2deg(theta)
+        x = [[152.1e9, -35786e3, 0], [152.1e9, 0, 0], [249.23e9*cos(theta), 249.23e9*sin(theta), 0]];
+        v = [[3337, 29.29e3, 0], [0, 29.29e3, 0], [-21.97e3*sin(theta), 21.97e3*cos(theta), 0]];
+        m = [1e3, 5.972e24, 6.39e23, 1.989e30];
+        [T, S, closestApproach] = simulate(x, v, m, 10000, 10000);
+        if(closestApproach < closestClosestApproach)
+            closestClosestApproach = closestApproach;
+            bestT = T;
+            bestS = S;
+            bestTheta = theta;
+        end
+    end
+    T = bestT;
+    S = bestS;
+    clf;
     plot(S(:,1), S(:,2), 'go');
     hold on;
     plot(S(:,4), S(:,5), 'b');
     plot(S(:,7), S(:,8), 'r');
     plot(0,0,'k.');
-    axis equal
+    xlabel('x (meters)');
+    ylabel('y (meters)');
+    legend('Rocket', 'Earth', 'Mars', 'Sun');
+    title('Earth to Mars Transfer');
+    axis equal;
+    closestApproach
+    rad2deg(bestTheta)
 end
