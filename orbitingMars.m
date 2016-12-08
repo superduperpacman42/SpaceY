@@ -1,21 +1,16 @@
-function success = orbitingMars(rocket, v_rocket, mars, v_mars, m_mars, ...
-    sun, m_sun)
+function success = orbitingMars(S)
     G = 6.673e-11;
-    r = norm(rocket - mars);
-    v = norm(v_rocket - v_mars);
-    e_gravity = -m_mars*G/r;
-    e_kinetic = 0.5*v^2;
-%     r_sun_rocket = norm(rocket-sun);
-%     r_sun_mars = norm(mars-sun);
-%     e_sun = -m_sun*G/r_sun_mars - -m_sun*G/r_sun_rocket;
-    success = e_kinetic + e_gravity; % negative = orbiting
-    if r>0.56e9
-       success = r; 
+    dx = [S(:,1)-S(:,7), S(:,2)-S(:,8), S(:,3)-S(:,9)];
+    dist = (dx(:,1).^2 + dx(:,2).^2 + dx(:,3).^2).^.5;
+    v = [S(end, 10)-S(end, 13), S(end, 11)-S(end, 14), S(end, 12)-S(end, 15)];
+    r = dist(end);
+    vtarget = sqrt(6.39e23*G/r);
+    e = abs(min(dist)-max(dist))/abs(min(dist)+max(dist));
+    success = max(e, abs((norm(v) - vtarget)/vtarget));
+    if abs((norm(v) - vtarget)/vtarget) < 100
+        success = e;
     end
+%     end
+%     success = abs(norm(v) - vtarget);
+% %     success = abs(min(dist)-max(dist))/abs(min(dist)+max(dist));
 end
-
-% mars = zero energy
-% closer to sun = negative energy (has to escape)
-% further from sun = positive energy
-% energy for rocket to escape - energy needed for mars to escape (reference)
-% eg rocket - eg mars
