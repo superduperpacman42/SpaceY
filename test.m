@@ -2,7 +2,8 @@ function error = test(params)
     params
     theta = params(1);
     m_fuel1 = params(2);
-    m_fuel2 = params(3);
+    m_fuel2 = 0.274011747614610e5;
+%     m_fuel2 = params(3);
     theta = deg2rad(theta);
     x = [[152.1e9, -35786e3, 0], [152.1e9, 0, 0], [249.23e9*cos(theta), 249.23e9*sin(theta), 0]];
     v = [[3337, 29.29e3, 0], [0, 29.29e3, 0], [-21.97e3*sin(theta), 21.97e3*cos(theta), 0]];
@@ -39,5 +40,5 @@ function error = test(params)
     axis equal;
     drawnow;
     error
-     deccelPoint(7)
+%      deccelPoint(7)
 end

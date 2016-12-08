@@ -12,20 +12,21 @@ function [T, S, error, deccelPoint] = simulate(x, v, m, v_fuel, m_fuel1, m_fuel2
     v(1) = v_rocket(1);
     v(2) = v_rocket(2);
     v(3) = v_rocket(3);
-    options = odeset('MaxStep', 1e3, 'RelTol', 1e7);%, 'Event', @events);
+    options = odeset('MaxStep', 1e4, 'RelTol', 1e7);%, 'Event', @events);
     decceleration = [0,0,0];
     deccelPoint = [0,0,0,0,0,0];
     mindist = 1e100;
-    [T, S] = ode45(@getAcceleration, [0,.8*pi*1e7], [x, v, m], options);
-    if isequal(deccelPoint, [0,0,0,0,0,0])
-        error = mindist;
-    else
-        S2 = orbitData(T, S, deccelPoint);
-        error = orbitingMars(S2);
-        if error < 200
-            error = (m_fuel1 + m_fuel2)/10000;
-        end
-    end
+    [T, S] = ode45(@getAcceleration, [0,1*pi*1e7], [x, v, m], options);
+    error = mindist;
+%     if isequal(deccelPoint, [0,0,0,0,0,0])
+%         error = mindist;
+%     else
+%         S2 = orbitData(T, S, deccelPoint);
+%         error = orbitingMars(S2);
+%         if error < 200
+%             error = (m_fuel1 + m_fuel2)/10000;
+%         end
+%     end
     
     % Flow function for ode45: returns velocity, accleration, and mass vectors 
     % in m/s, m/s^2, and kg given position, velocity, and mass vectors in m,
@@ -51,10 +52,10 @@ function [T, S, error, deccelPoint] = simulate(x, v, m, v_fuel, m_fuel1, m_fuel2
         if norm(rocket - mars) < mindist
             mindist = norm(rocket - mars);
         end
-        if isequal(decceleration, [0,0,0]) && norm(rocket - mars) < 0.56e9
-            deccelPoint = [rocket, mars, T];
-            decceleration = thrust(v_fuel, m_fuel2, m_rocket, v_mars-v_rocket);
-        end
+%         if isequal(decceleration, [0,0,0]) && norm(rocket - mars) < 0.56e9
+%             deccelPoint = [rocket, mars, T];
+%             decceleration = thrust(v_fuel, m_fuel2, m_rocket, v_mars-v_rocket);
+%         end
         v_rocket = v_rocket + decceleration;
         dS = [v_rocket'; v_earth'; v_mars'; a_rocket'; a_earth'; a_mars'; 0; 0; 0; 0];
     end
